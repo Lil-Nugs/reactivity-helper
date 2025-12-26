@@ -1,6 +1,6 @@
 ---
 name: dexie-helper
-description: Use this agent when working with the database layer - designing Dexie schemas, creating CRUD hooks, handling migrations, or optimizing IndexedDB queries. Essential for offline-first data patterns.
+description: ALWAYS invoke before any database work. Triggers: creating/modifying Dexie schema, writing CRUD hooks (useIncidents, useDepartures, etc.), adding indexes, or handling migrations. Do NOT write database code directly - use this agent first.
 model: sonnet
 color: green
 ---

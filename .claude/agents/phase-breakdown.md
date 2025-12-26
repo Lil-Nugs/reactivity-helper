@@ -1,6 +1,6 @@
 ---
 name: phase-breakdown
-description: Use this agent at the start of an implementation phase to break it down into beads issues with proper dependencies. Reads DESIGN.md for current specifications.
+description: ALWAYS invoke when starting a new implementation phase. Triggers: user says "start Phase X", "begin implementing", or asks to plan work for a module. Do NOT start implementation without first running this to create beads issues.
 model: haiku
 color: pink
 ---

@@ -1,6 +1,6 @@
 ---
 name: mobile-ux-reviewer
-description: Use this agent to review components for mobile UX issues - touch targets, gestures, iOS Safari quirks, safe areas, and one-handed usability. Run after implementing UI components.
+description: ALWAYS invoke after implementing UI components. Triggers: finished a screen, completed a form, added interactive elements, or before marking a UI task complete. Proactively run this after any UI work to catch mobile issues early.
 model: haiku
 color: orange
 ---

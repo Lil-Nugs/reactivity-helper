@@ -1,6 +1,6 @@
 ---
 name: pwa-auditor
-description: Use this agent to validate PWA functionality - service worker caching, manifest configuration, offline behavior, and "Add to Home Screen" flow. Run at phase completion to ensure offline-first works correctly.
+description: ALWAYS invoke at phase completion or before major releases. Triggers: finished implementing a phase, preparing to test on device, or after changes to service worker/manifest. Proactively run this to validate offline functionality still works.
 model: haiku
 color: cyan
 ---

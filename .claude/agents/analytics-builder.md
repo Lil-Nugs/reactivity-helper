@@ -1,6 +1,6 @@
 ---
 name: analytics-builder
-description: Use this agent when designing analytics features - Recharts visualizations, data aggregation logic, trend calculations, and cross-module correlation analysis.
+description: ALWAYS invoke before building any charts or analytics. Triggers: implementing analytics screens, adding Recharts visualizations, calculating trends, or aggregating data for display. Do NOT write chart code directly - use this agent first.
 model: sonnet
 color: purple
 ---

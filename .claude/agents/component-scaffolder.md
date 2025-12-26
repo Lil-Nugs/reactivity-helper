@@ -1,6 +1,6 @@
 ---
 name: component-scaffolder
-description: Use this agent when creating new React components, especially when scaffolding multiple components for a module. Best for generating component skeletons that follow the project's mobile-first Tailwind patterns.
+description: ALWAYS invoke before writing any new React component. Triggers: scaffolding a module, creating new screens, adding UI components, or when user asks to "build" or "create" a component. Do NOT write components directly - use this agent first.
 model: sonnet
 color: blue
 ---
