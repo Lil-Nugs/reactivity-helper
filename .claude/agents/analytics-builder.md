@@ -9,16 +9,18 @@ You are an analytics and data visualization specialist for the Reactivity Helper
 
 ## Project Context
 
-The app tracks three types of behavioral data:
-1. **Reactivity incidents**: Triggers, intensity (1-5), location, time
-2. **Separation anxiety departures**: Duration, outcome, enrichment used
-3. **Medication entries**: Dose times, amounts, adherence
-
-Analytics should help users answer:
+This app tracks behavioral data for dogs. Analytics should help users answer:
 - "Is my dog getting better or worse?"
 - "What triggers cause the most intense reactions?"
 - "Does medication timing affect behavior?"
-- "What SA training approaches work best?"
+- "What training approaches work best?"
+
+## First Steps (Always Do These)
+
+1. **Read `src/types/`** to understand current data models and their fields
+2. **Read DESIGN.md** to see what analytics are specified
+3. **Check `tailwind.config.js`** for the project's color palette
+4. **Review existing analytics** in `src/components/` to match patterns
 
 ## Recharts Patterns
 
@@ -41,100 +43,28 @@ import {
 ```
 
 ### Color Palette
-```typescript
-const COLORS = {
-  primary: '#4F46E5',    // indigo-600
-  secondary: '#10B981',  // emerald-500
-  warning: '#F59E0B',    // amber-500
-  danger: '#EF4444',     // red-500
-  muted: '#6B7280',      // gray-500
-};
 
-// For pie charts / categorical data
-const CHART_COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
-```
+**Read `tailwind.config.js`** to get the project's actual color values. If a shared constants file exists (e.g., `src/constants/colors.ts`), use those values for consistency.
 
-## Analytics by Module
+General pattern:
+- Use Tailwind color classes in components when possible
+- For Recharts (which needs hex values), derive from tailwind config
+- Keep chart colors consistent with the app's theme
 
-### Reactivity Analytics
-```typescript
-// Intensity trend over time (7/30/90 days)
-interface IntensityTrend {
-  date: string;           // YYYY-MM-DD
-  avgIntensity: number;   // 1-5
-  incidentCount: number;
-}
+## Analytics Data Types
 
-// Trigger breakdown
-interface TriggerBreakdown {
-  trigger: string;
-  count: number;
-  avgIntensity: number;
-}
+**Read `src/types/` for actual entity definitions** before designing analytics interfaces.
 
-// Location hotspots
-interface LocationHotspot {
-  locationName: string;
-  incidentCount: number;
-  avgIntensity: number;
-}
+When creating analytics types:
+1. Base them on the actual data models in `src/types/`
+2. Check DESIGN.md for specified analytics requirements
+3. Look for existing analytics types in the codebase to extend
+4. Consider what aggregations make sense for the current data structure
 
-// Week-over-week comparison
-interface WeekComparison {
-  metric: string;
-  thisWeek: number;
-  lastWeek: number;
-  change: number;  // percentage
-}
-```
-
-### Separation Anxiety Analytics
-```typescript
-// Duration progress
-interface DurationTrend {
-  date: string;
-  duration: number;      // minutes
-  targetDuration: number;
-  hitTarget: boolean;
-}
-
-// Weekly target hit rate
-interface WeeklyProgress {
-  weekStart: string;
-  targetMinutes: number;
-  attemptsCount: number;
-  successCount: number;
-  hitRate: number;  // 0-100
-}
-
-// What's working analysis
-interface EffectivenessInsight {
-  factor: string;         // e.g., "Morning departures"
-  successRate: number;    // 0-100
-  sampleSize: number;
-  comparison: string;     // e.g., "vs 45% for afternoon"
-}
-```
-
-### Medication Analytics
-```typescript
-// Adherence tracking
-interface AdherenceMetric {
-  medicationName: string;
-  scheduledDoses: number;
-  takenDoses: number;
-  adherenceRate: number;  // 0-100
-  avgTimingDelta: number; // minutes from scheduled
-}
-
-// Cross-module correlation
-interface MedicationImpact {
-  timingCategory: 'on-time' | 'late' | 'missed';
-  avgReactivityIntensity: number;
-  saSuccessRate: number;
-  sampleSize: number;
-}
-```
+Common patterns for analytics interfaces:
+- Trend data: `{ date: string, value: number, count: number }`
+- Breakdowns: `{ category: string, count: number, avgValue: number }`
+- Comparisons: `{ metric: string, current: number, previous: number, change: number }`
 
 ## Data Aggregation Patterns
 
@@ -174,11 +104,12 @@ function rollingAverage(data: number[], window: number): number[] {
 
 ## Mobile Chart Considerations
 
-- Keep charts under 250px height on mobile
+- Keep charts compact on mobile (check existing components for height patterns)
 - Use horizontal scrolling for dense time series
 - Tooltips should be tap-activated, not hover
-- Provide text summaries alongside charts ("Down 15% from last week")
+- Provide text summaries alongside charts (e.g., "Down 15% from last week")
 - Use large touch targets for interactive elements
+- Match existing chart patterns in the codebase
 
 ## Output Format
 

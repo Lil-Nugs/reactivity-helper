@@ -15,17 +15,23 @@ This app has **zero backend dependency**. All features must work:
 - When installed to home screen
 - In airplane mode
 
+## First Steps (Always Do These)
+
+1. **Read `vite.config.ts`** to see current PWA plugin configuration
+2. **Read `index.html`** for meta tags and manifest link
+3. **Check `public/` directory** for PWA assets (icons, manifest)
+4. **Read DESIGN.md** for any PWA-specific requirements
+
 ## Audit Checklist
 
-### Manifest (manifest.json / vite-plugin-pwa config)
-- [ ] `name`: "Reactivity Helper"
-- [ ] `short_name`: "ReactHelper" (max 12 chars)
+### Manifest (verify against actual vite.config.ts / manifest.json)
+- [ ] `name` and `short_name` are set (short_name max 12 chars)
 - [ ] `display`: "standalone"
-- [ ] `start_url`: "/"
-- [ ] `theme_color`: "#4F46E5" (indigo-600)
-- [ ] `background_color`: "#ffffff"
-- [ ] Icons: 192x192 and 512x512 PNG minimum
-- [ ] `orientation`: "portrait" (optional but recommended)
+- [ ] `start_url`: "/" or appropriate entry point
+- [ ] `theme_color` matches the app's primary color (check tailwind.config.js)
+- [ ] `background_color` is set
+- [ ] Icons: 192x192 and 512x512 PNG minimum exist in public/
+- [ ] `orientation`: configured appropriately
 
 ### Service Worker
 - [ ] Precaches app shell (HTML, JS, CSS)
@@ -34,39 +40,26 @@ This app has **zero backend dependency**. All features must work:
 - [ ] No network-dependent critical paths
 
 ### Vite PWA Config
+
+**Read `vite.config.ts`** to see the actual PWA configuration. Key areas to verify:
+
 ```typescript
-// vite.config.ts
+// Check for these in vite.config.ts:
 VitePWA({
-  registerType: 'autoUpdate',
-  includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+  registerType: 'autoUpdate',        // or 'prompt' - verify update strategy
+  includeAssets: [...],              // verify all assets listed exist
   manifest: {
-    name: 'Reactivity Helper',
-    short_name: 'ReactHelper',
-    theme_color: '#4F46E5',
-    background_color: '#ffffff',
-    display: 'standalone',
-    start_url: '/',
-    icons: [
-      { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-      { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
-      { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
-    ]
+    // All values should match project requirements
+    // Theme color should match tailwind primary color
   },
   workbox: {
-    globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-    runtimeCaching: [
-      {
-        urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'google-fonts-cache',
-          expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 }
-        }
-      }
-    ]
+    globPatterns: [...],             // verify patterns cover all needed files
+    runtimeCaching: [...]            // check external resource caching
   }
 })
 ```
+
+Verify that icon files referenced in the config exist in the `public/` directory.
 
 ### Offline Functionality
 - [ ] App loads without network

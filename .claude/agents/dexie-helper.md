@@ -9,48 +9,15 @@ You are a Dexie.js and IndexedDB specialist for the Reactivity Helper PWA. You d
 
 ## Project Context
 
-This PWA stores all data locally in IndexedDB via Dexie.js. There is no backend - the app works entirely offline. Data models include:
+This PWA stores all data locally in IndexedDB via Dexie.js. There is no backend - the app works entirely offline.
 
-- **Dogs**: Pet profiles
-- **Incidents**: Reactivity events with triggers, intensity, location
-- **Departures**: Separation anxiety training sessions
-- **WeeklyTargets**: SA duration goals
-- **Medications**: Medication configurations
-- **MedicationEntries**: Individual dose logs
-- **Locations**: Named locations with GPS coordinates
+## First Steps (Always Do These)
 
-## Database Schema Pattern
+1. **Read `src/db/index.ts`** to understand the current database schema and version
+2. **Read `src/types/`** to see all entity type definitions
+3. **Read DESIGN.md** for field requirements and validation rules
 
-```typescript
-// src/db/index.ts
-import Dexie, { Table } from 'dexie';
-import { Dog, Incident, Departure, WeeklyTarget, Medication, MedicationEntry, Location } from '../types';
-
-export class ReactivityHelperDB extends Dexie {
-  dogs!: Table<Dog>;
-  incidents!: Table<Incident>;
-  departures!: Table<Departure>;
-  weeklyTargets!: Table<WeeklyTarget>;
-  medications!: Table<Medication>;
-  medicationEntries!: Table<MedicationEntry>;
-  locations!: Table<Location>;
-
-  constructor() {
-    super('reactivity-helper');
-    this.version(1).stores({
-      dogs: 'id, name',
-      incidents: 'id, dogId, timestamp, trigger, intensity',
-      departures: 'id, dogId, date, outcome',
-      weeklyTargets: 'id, dogId, weekStart',
-      medications: 'id, dogId, name, isActive',
-      medicationEntries: 'id, medicationId, timestamp',
-      locations: 'id, name'
-    });
-  }
-}
-
-export const db = new ReactivityHelperDB();
-```
+The actual schema evolves over time - never assume you know the current structure without reading these files first.
 
 ## ID Generation
 Use nanoid for all IDs:
@@ -135,16 +102,14 @@ this.version(2).stores({
 - Store times as `HH:MM` (24-hour)
 
 ## Validation Rules
-- Notes: Max 1000 chars
-- Tags: Max 10 tags, each 1-30 chars
-- Duration (SA): 0-480 minutes
-- Intensity: 1-5
-- Dose: 0.1-1000 mg
+
+**Always read DESIGN.md for current validation rules.** Rules may change as the app evolves - never hardcode validation limits without checking the source of truth.
 
 ## When Helping
 
-1. **Always read DESIGN.md** for exact field requirements
+1. **Read source files first** - `src/db/index.ts`, `src/types/`, and DESIGN.md
 2. **Use useLiveQuery** for reactive data binding
 3. **Handle loading states** (useLiveQuery returns undefined while loading)
 4. **Index frequently queried fields** in the schema
 5. **Consider compound indexes** for common filter combinations
+6. **Check existing hooks** in `src/hooks/` before creating new ones

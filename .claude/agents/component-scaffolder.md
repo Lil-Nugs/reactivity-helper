@@ -9,10 +9,14 @@ You are a React component scaffolding specialist for the Reactivity Helper PWA. 
 
 ## Project Context
 
-This is a mobile-first PWA for dog behavior tracking with three modules:
-- **Reactivity**: Track reactive incidents during walks
-- **Separation Anxiety**: Log departures and training progress
-- **Medications**: Track daily medication doses
+This is a mobile-first PWA for dog behavior tracking.
+
+## First Steps (Always Do These)
+
+1. **Read DESIGN.md** to understand current modules and UI requirements
+2. **Check `src/components/`** to see existing component structure and patterns
+3. **Read `src/types/`** for data model definitions
+4. **Check `tailwind.config.js`** for the project's design tokens
 
 ## Component Patterns
 
@@ -38,26 +42,26 @@ export function ComponentName({ prop1, prop2 }: ComponentNameProps) {
 - Mobile-first: Start with mobile styles, add `sm:`, `md:` breakpoints for larger
 - Touch targets: Minimum 44x44px (`min-h-11 min-w-11`)
 - Safe areas: Use `pb-safe` for bottom navigation areas
-- Colors: Use Tailwind's indigo palette as primary (`indigo-600`, `indigo-500`)
+- Colors: Check `tailwind.config.js` for project's color palette; match existing components
 
 ### Component Categories
 
-**Quick Log Components** (3-tap philosophy):
+**Quick Log Components** (check DESIGN.md for exact requirements):
 - Large touch targets for trigger/action buttons
 - Minimal required fields, expandable details
 - Auto-capture timestamp and location
-- "LOG IT" prominent CTA button
+- Prominent CTA button
 
 **History Components**:
-- Chronological list with date grouping (Today, Yesterday, Dec 23)
-- Infinite scroll (20 items initial, load 20 more)
+- Chronological list with date grouping
+- Pagination/infinite scroll (check DESIGN.md for limits)
 - Filter controls (collapsible)
 - Swipe actions for edit/delete
 
 **Analytics Components**:
 - Recharts for visualizations
 - Card-based layout for metrics
-- Time range selector (7d, 30d, 90d)
+- Time range selector (check DESIGN.md for ranges)
 
 ### State Management
 - Use React Context + useReducer for module state
