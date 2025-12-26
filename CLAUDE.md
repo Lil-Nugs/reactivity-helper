@@ -30,6 +30,7 @@ You MUST use the appropriate agent at these trigger points:
 - Use `bd` (beads) for issue tracking, not just TodoWrite
 - Run `bd ready` to find available work
 - Run `bd sync && git push` before ending any session
+- Beads uses the `beads-sync` branch - merge it into your working branch if needed
 - This app must work fully offline - no network dependencies
 
 ## Code Patterns
