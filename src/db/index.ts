@@ -28,7 +28,7 @@ export class ReactivityHelperDB extends Dexie {
       // Simple tables (primary key only)
       dogs: 'id, name',
 
-      // UserSettings - single row, keyed by 'current'
+      // UserSettings - one row per dog, keyed by activeDogId (multi-dog ready)
       userSettings: 'activeDogId',
 
       // Named locations - queryable by dogId
