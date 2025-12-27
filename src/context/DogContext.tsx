@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db';
 import type { Dog } from '../types/common';
 
@@ -6,8 +7,6 @@ interface DogContextType {
   activeDog: Dog | null;
   isLoading: boolean;
   error: string | null;
-  setActiveDog: (dog: Dog) => void;
-  refetch: () => Promise<void>;
 }
 
 const DogContext = createContext<DogContextType | null>(null);
@@ -18,44 +17,28 @@ interface DogProviderProps {
 
 /**
  * Provider that manages the active dog state.
- * Loads the first dog on mount (v1 is single-dog only).
+ * Uses useLiveQuery for reactive updates when database changes.
+ * Loads the first dog (v1 is single-dog only).
  */
 export function DogProvider({ children }: DogProviderProps) {
-  const [activeDog, setActiveDog] = useState<Dog | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchActiveDog = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
+  // useLiveQuery automatically re-queries when the database changes
+  const activeDog = useLiveQuery(
+    async () => {
       // v1: Single dog only, get the first one
       const dogs = await db.dogs.toArray();
+      return dogs.length > 0 ? dogs[0] : null;
+    },
+    [], // no dependencies
+    null // default value while loading
+  );
 
-      if (dogs.length > 0) {
-        setActiveDog(dogs[0]);
-      } else {
-        setActiveDog(null);
-      }
-    } catch (err) {
-      console.error('Failed to fetch active dog:', err);
-      setError('Failed to load dog profile');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchActiveDog();
-  }, []);
+  // useLiveQuery returns undefined while loading, then the actual value
+  const isLoading = activeDog === undefined;
 
   const value: DogContextType = {
-    activeDog,
+    activeDog: activeDog ?? null,
     isLoading,
-    error,
-    setActiveDog,
-    refetch: fetchActiveDog,
+    error: null, // useLiveQuery handles errors internally
   };
 
   return <DogContext.Provider value={value}>{children}</DogContext.Provider>;
