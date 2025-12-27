@@ -25,6 +25,21 @@ You MUST use the appropriate agent at these trigger points:
 | Completed a phase | `pwa-auditor` | Validates offline functionality |
 | Changed any feature | `docs-sync-validator` | Keeps DESIGN.md accurate |
 
+### Phase Review Agents (run via `/phase-review`)
+
+These agents run in parallel during phase completion reviews:
+
+| Agent | What It Checks |
+|-------|----------------|
+| `mobile-ux-reviewer` | Touch targets, iOS safe areas, tap feedback, scroll behavior |
+| `pwa-auditor` | Service worker, offline persistence, network dependencies |
+| `docs-sync-validator` | DESIGN.md accuracy, phase checklist, type definitions |
+| `accessibility-reviewer` | ARIA labels, keyboard nav, screen reader, color contrast |
+| `dexie-schema-reviewer` | Index usage, query patterns, migrations, referential integrity |
+| `react-patterns-reviewer` | Hook dependencies, memoization, state management, re-renders |
+| `data-validation-reviewer` | Form validation, timestamps, type guards, input sanitization |
+| `cross-platform-reviewer` | iOS vs Android parity, keyboard behavior, platform CSS |
+
 ## Workflow Reminders
 
 - Use `bd` (beads) for issue tracking, not just TodoWrite
