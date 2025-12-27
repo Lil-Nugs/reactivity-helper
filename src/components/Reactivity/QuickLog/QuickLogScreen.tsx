@@ -2,25 +2,22 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { Header } from '../../common/Header';
-import { BottomNav } from '../../common/BottomNav';
+import { BottomNav, type TabType } from '../../common/BottomNav';
 import { TriggerGrid } from './TriggerGrid';
 import { IntensitySlider } from './IntensitySlider';
+import { IncidentList } from '../History/IncidentList';
 import { db } from '../../../db';
 import { useDog } from '../../../context';
 import type { TriggerType, Incident } from '../../../types/reactivity';
 
 /**
- * Main Quick Log screen for reactivity incidents.
- * Flow: Select trigger → Select intensity → LOG IT (3 taps)
- *
- * Auto-captures:
- * - Timestamp (ISO 8601)
- * - Location (if permission granted, fails gracefully)
+ * Main Reactivity screen with tabbed navigation between Log, History, and Stats.
  */
 export function QuickLogScreen() {
   const navigate = useNavigate();
   const { activeDog } = useDog();
 
+  const [activeTab, setActiveTab] = useState<TabType>('log');
   const [selectedTrigger, setSelectedTrigger] = useState<TriggerType | null>(null);
   const [selectedIntensity, setSelectedIntensity] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
   const [isLogging, setIsLogging] = useState(false);
@@ -90,64 +87,98 @@ export function QuickLogScreen() {
     }
   };
 
+  const getHeaderTitle = () => {
+    switch (activeTab) {
+      case 'log': return 'Quick Log';
+      case 'history': return 'History';
+      case 'stats': return 'Stats';
+    }
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'log':
+        return (
+          <main className="flex-1 p-4 pb-24 space-y-6">
+            {/* Trigger Grid */}
+            <TriggerGrid
+              selectedTrigger={selectedTrigger}
+              onSelect={setSelectedTrigger}
+            />
+
+            {/* Intensity Slider */}
+            <IntensitySlider
+              selectedIntensity={selectedIntensity}
+              onSelect={setSelectedIntensity}
+            />
+
+            {/* Details Expander - TODO: Phase 2 */}
+            <button
+              className="w-full py-3 px-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 font-medium text-sm active:bg-gray-50 transition-colors"
+              disabled
+            >
+              + Add More Details
+            </button>
+
+            {/* Log Button */}
+            <button
+              onClick={handleLogIncident}
+              disabled={!canSubmit || isLogging}
+              className={`
+                w-full min-h-14 px-6 rounded-lg font-semibold text-lg
+                transition-all
+                ${
+                  canSubmit && !isLogging
+                    ? 'bg-indigo-600 text-white active:bg-indigo-700 shadow-md'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }
+                ${showSuccess ? 'bg-green-600 text-white' : ''}
+              `}
+            >
+              {showSuccess ? '✓ Logged!' : isLogging ? 'Logging...' : 'LOG IT'}
+            </button>
+          </main>
+        );
+
+      case 'history':
+        return (
+          <main className="flex-1 flex flex-col pb-20">
+            <IncidentList dogId={activeDogId} />
+          </main>
+        );
+
+      case 'stats':
+        return (
+          <main className="flex-1 flex flex-col items-center justify-center pb-20 px-4">
+            <div className="text-6xl mb-4">📊</div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Stats Coming Soon
+            </h3>
+            <p className="text-sm text-gray-600 text-center">
+              Analytics and trends will be available in a future update.
+            </p>
+          </main>
+        );
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Header */}
       <Header
-        title="Reactivity Log"
+        title={getHeaderTitle()}
         showBackButton={true}
         onBack={() => navigate('/')}
         showSettingsButton={false}
       />
 
-      {/* Main Content */}
-      <main className="flex-1 p-4 pb-24 space-y-6">
-        {/* Trigger Grid */}
-        <TriggerGrid
-          selectedTrigger={selectedTrigger}
-          onSelect={setSelectedTrigger}
-        />
-
-        {/* Intensity Slider */}
-        <IntensitySlider
-          selectedIntensity={selectedIntensity}
-          onSelect={setSelectedIntensity}
-        />
-
-        {/* Details Expander - TODO: Phase 2 */}
-        <button
-          className="w-full py-3 px-4 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 font-medium text-sm active:bg-gray-50 transition-colors"
-          disabled
-        >
-          + Add More Details
-        </button>
-
-        {/* Log Button */}
-        <button
-          onClick={handleLogIncident}
-          disabled={!canSubmit || isLogging}
-          className={`
-            w-full min-h-14 px-6 rounded-lg font-semibold text-lg
-            transition-all
-            ${
-              canSubmit && !isLogging
-                ? 'bg-indigo-600 text-white active:bg-indigo-700 shadow-md'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }
-            ${showSuccess ? 'bg-green-600 text-white' : ''}
-          `}
-        >
-          {showSuccess ? '✓ Logged!' : isLogging ? 'Logging...' : 'LOG IT'}
-        </button>
-      </main>
+      {/* Tab Content */}
+      {renderContent()}
 
       {/* Bottom Navigation */}
       <BottomNav
-        activeTab="log"
-        onTabChange={(tab) => {
-          // TODO: Handle tab changes when history/stats screens exist
-          console.log('Tab change:', tab);
-        }}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
       />
     </div>
   );
