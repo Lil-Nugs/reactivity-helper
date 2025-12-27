@@ -1,1 +1,0 @@
-if('serviceWorker' in navigator) navigator.serviceWorker.register('/reactivity-helper/dev-sw.js?dev-sw', { scope: '/reactivity-helper/', type: 'classic' })
