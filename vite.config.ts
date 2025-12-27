@@ -41,6 +41,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // Fix navigation route for GitHub Pages base path
+        navigateFallback: '/reactivity-helper/index.html',
         // Cache-first strategy for all resources
         runtimeCaching: [
           {
