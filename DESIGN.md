@@ -448,6 +448,17 @@ Chronological list of incidents with filters.
 └─────────────────────────────┘
 ```
 
+**Filter Options** (bottom sheet when tapping [Filter]):
+| Filter | Type | Options |
+|--------|------|---------|
+| Trigger | Multi-select chips | Dog, Person, Bike, Car, Noise, Child, Jogger, Other |
+| Intensity | Range slider | 1-2 (mild), 3 (moderate), 4-5 (severe) |
+| Location | Multi-select | List of saved NamedLocations + "Unknown" |
+| Date range | Date picker | Start date → End date |
+| Tags | Multi-select | List of used tags |
+
+Active filters display as dismissible chips below the header. "Clear all" link when filters active.
+
 ### Screen 3: Analytics
 Visual trends and insights. Time range selector: 7d, 30d, 90d, All.
 
@@ -537,11 +548,57 @@ Optimized for logging departures with sensible defaults.
 - Companions remaining
 - External factors
 - Enrichment given + engagement level
-- Behavior timeline entries
+- Behavior timeline entries (see Behavior Log UI below)
 - Return behavior
 - Distress evidence
 - Tags (chip input with recent suggestions)
 - Notes
+
+### Behavior Log UI (within Details Expander)
+For logging behaviors observed during departure (from camera or memory after return):
+
+```
+┌─────────────────────────────┐
+│  📹 Behavior Log            │
+├─────────────────────────────┤
+│  ┌─────────────────────────┐│
+│  │ 5 min: Pacing ③    [✕]  ││
+│  │ 12 min: Settled ①  [✕]  ││
+│  │ 28 min: Whining ②  [✕]  ││
+│  └─────────────────────────┘│
+│                             │
+│  ┌─────────────────────────┐│
+│  │     + Add Behavior      ││
+│  └─────────────────────────┘│
+└─────────────────────────────┘
+
+Add Behavior mini-form (inline expansion):
+┌─────────────────────────────┐
+│  Minute mark:               │
+│  ┌─────────────────────────┐│
+│  │  [  12  ]  min          ││
+│  └─────────────────────────┘│
+│                             │
+│  Behavior:                  │
+│  ┌─────┐ ┌─────┐ ┌─────┐   │
+│  │Calm │ │Pace │ │Whine│   │
+│  └─────┘ └─────┘ └─────┘   │
+│  ┌─────┐ ┌─────┐ ┌─────┐   │
+│  │Bark │ │Howl │ │ ... │   │
+│  └─────┘ └─────┘ └─────┘   │
+│                             │
+│  Intensity (optional):      │
+│  ① ② ③ ④ ⑤                 │
+│                             │
+│  ┌─────────────────────────┐│
+│  │      Save Entry ✓       ││
+│  └─────────────────────────┘│
+└─────────────────────────────┘
+```
+
+**Flow**: Tap "+ Add Behavior" → form expands inline → enter minute mark, select behavior, optionally set intensity → Save. Entry appears in list above. Tap [✕] to remove an entry.
+
+**Use case**: Reviewing camera footage after returning home, or jotting notes while watching live feed. Minute marks allow behaviorists to understand the timeline of the departure.
 
 ### Screen 2: Set Weekly Target
 ```
@@ -590,6 +647,17 @@ Optimized for logging departures with sensible defaults.
 │  ...                        │
 └─────────────────────────────┘
 ```
+
+**Filter Options** (bottom sheet when tapping [Filter]):
+| Filter | Type | Options |
+|--------|------|---------|
+| Outcome | Multi-select chips | Calm, Okay, Rough |
+| Duration | Segmented control | Under target, At/over target, All |
+| Exit type | Multi-select chips | Front door, Garage, Back door, No exit |
+| Date range | Date picker | Start date → End date |
+| Tags | Multi-select | List of used tags |
+
+Active filters display as dismissible chips below the header.
 
 ### Screen 4: Departure Analytics
 ```
@@ -725,6 +793,15 @@ One-tap logging for routine doses.
 │  ...                        │
 └─────────────────────────────┘
 ```
+
+**Filter Options** (bottom sheet when tapping [Filter]):
+| Filter | Type | Options |
+|--------|------|---------|
+| Medication | Multi-select | List of configured medications |
+| Timing status | Multi-select chips | On-time (±30 min), Late (>30 min), Missed |
+| Date range | Date picker | Start date → End date |
+
+Active filters display as dismissible chips below the header.
 
 ### Screen 4: Medication Analytics
 ```
@@ -1022,7 +1099,8 @@ body {
 
 ### Phase 2: Reactivity Full Context
 - [ ] Reactivity: Details expander (behaviors, response, notes)
-- [ ] Location capture (GPS + named locations)
+- [ ] Location capture (GPS + auto-match to named locations)
+- [ ] Named location management (add/edit/delete in Settings)
 - [ ] Reactivity: History filters
 - [ ] Reactivity: Edit/delete incidents
 
@@ -1048,11 +1126,12 @@ body {
 - [ ] Time-range selectors
 
 ### Phase 6: Polish
-- [ ] Settings screen (per-module configurations)
+- [ ] Settings: Dark mode toggle
+- [ ] Settings: Default behaviors to pre-select (Reactivity)
 - [ ] Data export (JSON/CSV, all modules)
-- [ ] Dark mode
-- [ ] Haptic feedback
+- [ ] Haptic feedback on button taps
 - [ ] App icon + splash screen
+- [ ] "Add to Home Screen" install banner (iOS)
 
 ---
 
@@ -1076,15 +1155,17 @@ body {
 
 8. **Quick outcome (Calm/Okay/Rough)** - Captures essential success/failure without requiring detailed behavior log for every departure.
 
-### Medication Module
-9. **Checkbox-first for routine doses** - One tap to log a dose at current time. Editing is secondary.
+9. **Post-hoc logging only (no timer)** - Duration is always entered manually after returning. If you open the app mid-departure, wait until you return to log. This avoids edge cases (app crashes, forgot to stop timer) and matches how you'd describe it to a behaviorist: "I was gone for about 45 minutes." No draft/partial departure state in v1.
 
-10. **Cross-module correlation** - Medication timing is analyzed against both reactivity intensity and SA success rates to surface patterns.
+### Medication Module
+10. **Checkbox-first for routine doses** - One tap to log a dose at current time. Editing is secondary.
+
+11. **Cross-module correlation** - Medication timing is analyzed against both reactivity intensity and SA success rates to surface patterns.
 
 ### Global
-11. **No account required** - All local storage. Lower friction, better privacy.
+12. **No account required** - All local storage. Lower friction, better privacy.
 
-12. **Module-first navigation** - Clear separation between reactivity, SA, and meds. Each has its own log/history/analytics flow.
+13. **Module-first navigation** - Clear separation between reactivity, SA, and meds. Each has its own log/history/analytics flow.
 
 ---
 
