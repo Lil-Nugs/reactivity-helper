@@ -40,3 +40,20 @@ You MUST use the appropriate agent at these trigger points:
 - **Styling**: Tailwind only, mobile-first (`min-h-11` for touch targets)
 - **State**: React Context + useReducer, Dexie for persistence
 - **Charts**: Recharts with ResponsiveContainer
+
+## Documentation Reference
+
+Find detailed information in these locations:
+
+### Implementation & Architecture
+- **docs/STATUS.md** - Implementation status, what's built vs planned, known issues, technical debt
+- **docs/ARCHITECTURE.md** - File structure, available hooks, database schema, UI patterns, error handling
+
+### Module Deep-Dives
+- **docs/modules/reactivity.md** - Reactivity module (components, data flow, triggers, edge cases)
+- **docs/modules/separation-anxiety.md** - Separation Anxiety module (departures, weekly targets, SA-specific considerations)
+- **docs/modules/medications.md** - Medications module (dose scheduling, adherence tracking, timing)
+
+### Future Planning
+- **docs/SUPABASE_MIGRATION.md** - Future migration plans
+- **docs/REFACTORING_ROADMAP.md** - Refactoring strategy
