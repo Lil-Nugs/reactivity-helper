@@ -1,19 +1,17 @@
 import type { TriggerType } from '../../../types/reactivity';
-import { TRIGGER_CONFIG } from '../../../constants/triggers';
+import { TRIGGER_CONFIG, TRIGGER_DISPLAY_ORDER } from '../../../constants/triggers';
 
 interface TriggerGridProps {
   selectedTrigger: TriggerType | null;
   onSelect: (trigger: TriggerType) => void;
 }
 
-// Derive triggers array from TRIGGER_CONFIG to ensure all 9 triggers are shown
-const triggers = (Object.entries(TRIGGER_CONFIG) as [TriggerType, { emoji: string; label: string }][]).map(
-  ([type, config]) => ({
-    type,
-    label: config.label,
-    emoji: config.emoji,
-  })
-);
+// Derive triggers array from explicit display order for consistent UI ordering
+const triggers = TRIGGER_DISPLAY_ORDER.map((type) => ({
+  type,
+  label: TRIGGER_CONFIG[type].label,
+  emoji: TRIGGER_CONFIG[type].emoji,
+}));
 
 /**
  * Grid of trigger buttons for quick incident logging.
