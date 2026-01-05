@@ -24,7 +24,7 @@ src/components/Reactivity/
 ├── QuickLog/
 │   ├── index.ts              # Barrel exports
 │   ├── QuickLogScreen.tsx    # Main container (tabs: Log, History, Stats)
-│   ├── TriggerGrid.tsx       # 2x3 grid of trigger buttons
+│   ├── TriggerGrid.tsx       # 3x3 grid of trigger buttons
 │   └── IntensitySlider.tsx   # 1-5 numbered button row
 └── History/
     ├── index.ts              # Barrel exports
@@ -204,10 +204,12 @@ type TriggerType =
 
 ### Currently Displayed in UI
 
-The `TriggerGrid` component displays a **subset** (6 triggers) using its own inline definition:
-- `dog`, `person`, `bike`, `car`, `loud_noise`, `other`
+The `TriggerGrid` component displays all 9 triggers in a 3x3 grid layout, using `TRIGGER_DISPLAY_ORDER` from `/src/constants/triggers.ts` for explicit ordering:
+- Row 1: `dog`, `person`, `bike`
+- Row 2: `car`, `skateboard`, `loud_noise`
+- Row 3: `child`, `jogger`, `other`
 
-**Note**: `TriggerGrid.tsx` defines triggers inline (not imported from `TRIGGER_CONFIG`), while `IncidentCard.tsx` uses `TRIGGER_CONFIG` for display. The types `skateboard`, `child`, and `jogger` are defined in the type system but not currently shown in the UI grid. Consider adding these in Phase 2 or making the grid configurable.
+**Note**: The display order is explicitly defined in `TRIGGER_DISPLAY_ORDER` to ensure "Other" is always last and ordering is consistent regardless of `TRIGGER_CONFIG` key order. TypeScript will error if a trigger type is missing from the order array.
 
 ---
 

@@ -1,28 +1,21 @@
 import type { TriggerType } from '../../../types/reactivity';
+import { TRIGGER_CONFIG, TRIGGER_DISPLAY_ORDER } from '../../../constants/triggers';
 
 interface TriggerGridProps {
   selectedTrigger: TriggerType | null;
   onSelect: (trigger: TriggerType) => void;
 }
 
-interface TriggerButton {
-  type: TriggerType;
-  label: string;
-  emoji: string;
-}
-
-const triggers: TriggerButton[] = [
-  { type: 'dog', label: 'Dog', emoji: '🐕' },
-  { type: 'person', label: 'Person', emoji: '🧑' },
-  { type: 'bike', label: 'Bike', emoji: '🚴' },
-  { type: 'car', label: 'Car', emoji: '🚗' },
-  { type: 'loud_noise', label: 'Noise', emoji: '🔊' },
-  { type: 'other', label: 'Other', emoji: '•••' },
-];
+// Derive triggers array from explicit display order for consistent UI ordering
+const triggers = TRIGGER_DISPLAY_ORDER.map((type) => ({
+  type,
+  label: TRIGGER_CONFIG[type].label,
+  emoji: TRIGGER_CONFIG[type].emoji,
+}));
 
 /**
  * Grid of trigger buttons for quick incident logging.
- * 2 rows x 3 columns with large touch targets.
+ * 3 rows x 3 columns with large touch targets.
  */
 export function TriggerGrid({ selectedTrigger, onSelect }: TriggerGridProps) {
   return (
