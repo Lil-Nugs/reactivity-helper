@@ -1,6 +1,8 @@
 # Project Next Step Analysis
 
-Analyze this project to determine the single most logical next step to implement. Do NOT implement anything - only analyze and recommend.
+Analyze this project to determine the next logical step(s) to implement. Do NOT implement anything - only analyze and recommend.
+
+**Steps requested**: $ARGUMENTS (default: 1)
 
 ## Analysis Steps
 
@@ -17,7 +19,7 @@ For each "completed" phase, ask:
 - Would a user consider this feature "done"?
 
 ### 3. Identify Candidates
-List 2-4 candidate next steps. For each, evaluate:
+List potential next steps. For each, evaluate:
 - **Value**: Does this unlock other work or provide user value?
 - **Dependencies**: What must exist first? Is it ready?
 - **Scope**: Can this be completed in one focused session?
@@ -31,9 +33,21 @@ Prefer work that:
 4. Provides immediate user value over infrastructure
 
 ### 5. Output Format
-Provide:
+
+If **1 step** requested (or no argument):
 - **Recommendation**: One specific next step (not a phase, a concrete task)
 - **Reasoning**: Why this over alternatives
 - **Prerequisites**: Anything that must be true/done first
 - **Success criteria**: How to know when it's done
-- **Suggested beads issues**: What to create before starting
+- **Suggested beads issue**: What to create before starting
+
+If **multiple steps** requested:
+Provide a prioritized list of N steps. For each step:
+- **Step N: [Title]**
+  - **Task**: Specific, concrete work to do
+  - **Why now**: Why this is the right priority
+  - **Dependencies**: What must be done first (including other steps in this list)
+  - **Success criteria**: How to know it's done
+  - **Suggested beads issue**: Title and type for `bd create`
+
+The steps should be ordered by priority and should include dependency relationships between them where applicable. These become the work queue for upcoming sessions.
